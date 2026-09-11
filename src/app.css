@@ -1,0 +1,949 @@
+@import "tailwindcss";
+
+/* =========================================================================
+   Hezarfen — light design system
+
+   A white page with one accent: gopher blue, #00ADD8. The surfaces are
+   Notion's: white paper, a warm off-white for every second band, hairline
+   rules instead of shadows, small radii, and type that is allowed to be
+   large because nothing else on the page is loud.
+
+   Everything is prefixed `hz-`. There is no dark contract and no `dark:`
+   variant to qualify — these tokens *are* the theme.
+   ========================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --paper: #ffffff;
+  --band: #f7f7f5; /* every second section, and card interiors on white */
+  --sunken: #f1f0ee; /* inputs, inner wells, illustration grounds */
+
+  /* Ink */
+  --ink: #1b1a17; /* headings */
+  --body: #37352f; /* body copy */
+  --muted: #787774; /* captions, labels, secondary rows */
+  --faint: #9b9a96; /* the quietest text that still has to be read */
+
+  /* Rules */
+  --line: #e9e9e7;
+  --line-strong: #dcdad5;
+
+  /* Accent: Go's cyan. Reserved for action, data and links. */
+  --brand: #00add8;
+  --brand-hover: #0097bd;
+  --brand-ink: #046b86; /* accent text on white, where #00add8 is too light */
+  --brand-wash: #eaf8fc; /* the tinted panel and hover fills */
+
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  --shadow-sm: 0 1px 2px rgb(15 15 15 / 0.06);
+  --shadow: 0 1px 2px rgb(15 15 15 / 0.06), 0 6px 20px rgb(15 15 15 / 0.05);
+  --shadow-lg: 0 1px 2px rgb(15 15 15 / 0.06), 0 18px 48px rgb(15 15 15 / 0.08);
+
+  --measure: 1120px;
+  --gutter: 24px;
+  --section-y: 96px;
+  --header-h: 60px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --quick: 160ms;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-band: var(--band);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --font-sans: "Inter Variable", Inter, -apple-system, "Segoe UI", Helvetica, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--body);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-synthesis-weight: none;
+  }
+
+  /* Copy never runs the full width of the viewport: that is most of why the
+     page reads like a document rather than a poster. */
+  p,
+  li,
+  dd {
+    max-width: 68ch;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--brand) 22%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ---- Layout ---------------------------------------------------------------- */
+.hz-band {
+  padding-block: var(--section-y);
+  padding-inline: var(--gutter);
+  background: var(--paper);
+}
+/* Every second band takes the off-white, so a section boundary is a change of
+   ground rather than a rule someone has to notice. */
+.hz-band-alt {
+  background: var(--band);
+  border-block: 1px solid var(--line);
+}
+.hz-wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.hz-narrow {
+  max-width: 760px;
+  margin-inline: auto;
+}
+.hz-anchor {
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+/* ---- Type ------------------------------------------------------------------ */
+.hz-display {
+  font-size: clamp(2.25rem, 4.6vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  color: var(--ink);
+  max-width: 22ch;
+}
+.hz-h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  max-width: 26ch;
+}
+.hz-h3 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.hz-lead {
+  font-size: 1.1875rem;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 62ch;
+}
+.hz-label {
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--brand-ink);
+}
+.hz-small {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ---- Buttons --------------------------------------------------------------- */
+.hz-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding-inline: 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--quick) var(--ease),
+    border-color var(--quick),
+    color var(--quick),
+    box-shadow var(--quick);
+}
+.hz-btn-lg {
+  height: 48px;
+  padding-inline: 22px;
+  font-size: 1rem;
+}
+.hz-btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+.hz-btn-primary:hover {
+  background: var(--brand-hover);
+}
+.hz-btn-ghost {
+  background: var(--paper);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.hz-btn-ghost:hover {
+  background: var(--band);
+}
+.hz-btn-quiet {
+  background: transparent;
+  color: var(--brand-ink);
+  padding-inline: 0;
+}
+.hz-btn-quiet:hover {
+  color: var(--brand-hover);
+}
+/* The arrow leans forward on hover — the one motion a button gets. */
+.hz-btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 200ms var(--ease);
+}
+.hz-btn:hover svg {
+  transform: translateX(2px);
+}
+
+/* ---- Header ---------------------------------------------------------------- */
+.hz-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.hz-header-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: var(--header-h);
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.hz-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+/* The bar's own breakpoints live here rather than as utility classes on the
+   markup: this stylesheet is unlayered, so it would win over Tailwind's
+   `lg:hidden` and leave the menu button showing on desktop. */
+/* Centred on the bar itself rather than in the space left over between the
+   logo and the button: `auto` margins would push it off-centre by half the
+   difference between those two, which is exactly what you notice. */
+.hz-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.hz-menu-btn,
+.hz-sheet {
+  display: none;
+}
+@media (max-width: 1024px) {
+  .hz-nav {
+    display: none;
+  }
+  .hz-menu-btn {
+    display: grid;
+  }
+  .hz-sheet {
+    display: block;
+  }
+}
+@media (max-width: 420px) {
+  .hz-header .hz-btn-primary {
+    display: none;
+  }
+}
+.hz-nav a {
+  padding: 7px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  color: var(--body);
+  transition: background var(--quick), color var(--quick);
+}
+.hz-nav a:hover {
+  background: var(--band);
+  color: var(--ink);
+}
+.hz-nav a.is-current {
+  color: var(--brand-ink);
+  font-weight: 500;
+}
+.hz-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hz-menu-btn {
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.hz-sheet {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  padding: 12px var(--gutter) 20px;
+}
+.hz-header-actions {
+  margin-left: auto;
+}
+.hz-sheet a {
+  display: block;
+  padding: 11px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  color: var(--body);
+}
+.hz-sheet a:hover {
+  background: var(--band);
+}
+.hz-sheet .hz-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* ---- Hero ------------------------------------------------------------------ */
+.hz-hero {
+  position: relative;
+  padding: clamp(56px, 8vw, 104px) var(--gutter) 0;
+  text-align: center;
+  overflow: hidden;
+}
+/* One wash behind the first screen, fading out well before the next band, so
+   the page opens on something other than flat white. */
+.hz-hero::before {
+  content: "";
+  position: absolute;
+  inset: -40% 0 auto;
+  height: 680px;
+  background: radial-gradient(60% 60% at 50% 42%, var(--brand-wash), transparent 70%);
+  z-index: -1;
+}
+.hz-hero-copy {
+  max-width: 880px;
+  margin-inline: auto;
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+}
+.hz-hero-copy .hz-display {
+  max-width: 20ch;
+  font-size: clamp(2.5rem, 5.6vw, 4.25rem);
+}
+.hz-hero-copy .hz-lead {
+  max-width: 56ch;
+  font-size: 1.25rem;
+}
+.hz-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.hz-hero-note {
+  font-size: 0.875rem;
+  color: var(--faint);
+}
+/* The product's drawing, on a card that reads as a frame without pretending
+   to be a screenshot. It is the largest thing on the page on purpose: the
+   first screen has one job, and it is showing what this is. */
+.hz-art-card {
+  margin: clamp(40px, 6vw, 72px) auto 0;
+  max-width: 1080px;
+  padding: clamp(14px, 2vw, 22px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+  box-shadow: var(--shadow-lg);
+}
+.hz-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* The drawing's structure: a shade darker than a hairline, so the line work
+     reads on white without competing with the type. */
+  color: #c4c2bb;
+}
+.hz-roles {
+  margin-top: clamp(40px, 6vw, 72px);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.hz-roles span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 20px 12px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.hz-roles span + span {
+  border-left: 1px solid var(--line);
+}
+.hz-roles i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--brand);
+}
+
+/* ---- Section header -------------------------------------------------------- */
+.hz-sechead {
+  display: grid;
+  gap: 14px;
+  max-width: 780px;
+}
+.hz-sechead-center {
+  margin-inline: auto;
+  justify-items: center;
+  text-align: center;
+}
+.hz-sechead-center :is(p, h2) {
+  margin-inline: auto;
+}
+
+/* ---- Cards ----------------------------------------------------------------- */
+.hz-grid {
+  margin-top: 44px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+}
+.hz-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.hz-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.hz-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  transition: border-color var(--quick), box-shadow var(--quick), transform 200ms var(--ease);
+}
+.hz-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.hz-card-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
+}
+.hz-card-icon svg {
+  width: 19px;
+  height: 19px;
+}
+.hz-card h3 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.hz-card p {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.hz-tag {
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--band);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---- Feature rows: copy beside a drawing ----------------------------------- */
+.hz-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+  padding-block: clamp(40px, 5vw, 64px);
+  border-top: 1px solid var(--line);
+}
+.hz-feature:first-of-type {
+  border-top: 0;
+}
+/* Odd rows put the drawing on the left, so four features in a row never read
+   as the same block four times. */
+.hz-feature-flip .hz-feature-art {
+  order: -1;
+}
+.hz-feature-copy {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+}
+.hz-feature-copy p {
+  font-size: 1.0625rem;
+  color: var(--muted);
+}
+.hz-feature-art {
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 2.5vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+}
+/* Feature drawings are supporting evidence, not the subject: capped well
+   below the column so a row never reads as a picture with a caption. */
+.hz-feature-art .hz-illustration {
+  max-width: 340px;
+  color: #c9c7c1;
+}
+.hz-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+.hz-pills span {
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.8125rem;
+  color: var(--body);
+}
+
+/* ---- Ticked proof list ----------------------------------------------------- */
+.hz-checks {
+  display: grid;
+  gap: 10px;
+  margin-top: 2px;
+}
+.hz-checks li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--body);
+}
+.hz-checks svg {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  flex: none;
+  color: var(--brand);
+}
+
+/* ---- Steps ----------------------------------------------------------------- */
+.hz-steps {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.hz-step {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding-top: 18px;
+  border-top: 2px solid var(--brand);
+}
+.hz-step:nth-child(n + 2) {
+  border-top-color: var(--line-strong);
+}
+.hz-step-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--brand-ink);
+}
+.hz-step p {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ---- Prose ----------------------------------------------------------------- */
+.hz-prose {
+  display: grid;
+  gap: 18px;
+  margin-top: 32px;
+}
+.hz-prose p {
+  max-width: 72ch;
+  font-size: 1.0625rem;
+  color: var(--body);
+}
+
+/* ---- Figures + credit card ------------------------------------------------- */
+.hz-facts {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+}
+.hz-figures {
+  display: grid;
+}
+.hz-figures > div {
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.hz-figures > div:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.hz-figures dt {
+  min-width: 2.5ch;
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--brand-ink);
+}
+.hz-figures dd {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.hz-builder {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding-left: clamp(0px, 2vw, 28px);
+  border-left: 1px solid var(--line);
+}
+
+/* ---- Note ------------------------------------------------------------------ */
+.hz-note {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--brand);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: var(--band);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--body);
+}
+.hz-note svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex: none;
+  color: var(--brand-ink);
+}
+
+/* ---- FAQ ------------------------------------------------------------------- */
+.hz-faq {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+}
+.hz-faq-item {
+  border-bottom: 1px solid var(--line);
+}
+.hz-faq-item summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 2px;
+  list-style: none;
+  cursor: pointer;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.hz-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.hz-faq-item summary > span {
+  flex: 1;
+}
+.hz-faq-item summary:hover {
+  color: var(--brand-ink);
+}
+.hz-faq-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  transition: transform 200ms var(--ease);
+}
+.hz-faq-item[open] svg {
+  transform: rotate(90deg);
+  color: var(--brand);
+}
+.hz-faq-item p {
+  padding: 0 2px 22px;
+  max-width: 76ch;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+/* ---- Closing panel --------------------------------------------------------- */
+.hz-cta {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: clamp(44px, 6vw, 72px) clamp(24px, 4vw, 56px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, var(--brand-wash), var(--paper));
+}
+.hz-cta .hz-h2 {
+  max-width: 24ch;
+}
+.hz-cta p {
+  max-width: 54ch;
+  color: var(--muted);
+}
+.hz-cta-mail {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  color: var(--brand-ink);
+}
+
+/* ---- Footer ---------------------------------------------------------------- */
+.hz-footer {
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  padding: 56px var(--gutter) 28px;
+}
+.hz-footer-inner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.hz-footer-cols {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: 32px;
+}
+.hz-footer h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.hz-footer ul {
+  display: grid;
+  gap: 9px;
+  margin-top: 14px;
+}
+.hz-footer li a {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  transition: color var(--quick);
+}
+.hz-footer li a:hover {
+  color: var(--brand-ink);
+}
+.hz-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+  color: var(--faint);
+}
+.hz-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  transition: color var(--quick), border-color var(--quick), transform 200ms var(--ease);
+}
+.hz-social:hover {
+  color: var(--brand-ink);
+  border-color: var(--line-strong);
+  transform: translateY(-1px);
+}
+
+/* ---- 404 ------------------------------------------------------------------- */
+.hz-404 {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 14px;
+  min-height: 62vh;
+  padding: 72px var(--gutter);
+  text-align: center;
+}
+.hz-404 svg {
+  width: 88px;
+  color: var(--line-strong);
+}
+
+/* ---- Scroll-triggered entrance --------------------------------------------
+   Blocks rise once on entry with a per-card stagger. `is-armed` is only ever
+   set on the client, so server markup is never hidden by a script that has
+   not run. */
+.hz-reveal.is-armed {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.hz-reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.hz-grid > .hz-reveal,
+.hz-steps > .hz-reveal {
+  display: grid;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hz-reveal.is-armed {
+    opacity: 1;
+    transform: none;
+  }
+  .hz-btn:hover svg {
+    transform: none;
+  }
+}
+
+/* ---- Responsive ------------------------------------------------------------ */
+@media (max-width: 1024px) {
+  :root {
+    --section-y: 72px;
+  }
+  .hz-grid,
+  .hz-grid-3,
+  .hz-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hz-feature,
+  .hz-facts,
+  .hz-footer-cols {
+    grid-template-columns: 1fr;
+  }
+  /* With one column the drawing follows the copy on every row, flipped or
+     not: alternating sides only means something side by side. */
+  .hz-feature-flip .hz-feature-art {
+    order: 0;
+  }
+  .hz-builder {
+    padding-left: 0;
+    padding-top: 20px;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+  }
+  .hz-grid,
+  .hz-grid-2,
+  .hz-grid-3,
+  .hz-steps {
+    grid-template-columns: 1fr;
+  }
+  .hz-roles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hz-roles span:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+  .hz-roles span:nth-child(3) {
+    border-left: 0;
+  }
+  .hz-hero-actions .hz-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

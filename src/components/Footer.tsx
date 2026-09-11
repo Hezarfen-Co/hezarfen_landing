@@ -1,7 +1,8 @@
+import { A } from "@solidjs/router";
 import { For } from "solid-js";
 import { FiArrowUpRight, FiLinkedin } from "solid-icons/fi";
 import Logo from "./Logo";
-import { anchors, mailto, site } from "~/config";
+import { anchors, mailto, routes, site } from "~/config";
 import { t } from "~/i18n";
 
 export default function Footer() {
@@ -19,7 +20,7 @@ export default function Footer() {
       links: [
         { label: t.nav.products, href: anchors.products },
         { label: t.nav.platform, href: anchors.platform },
-        { label: t.nav.theory, href: anchors.theory },
+        { label: t.nav.theory, href: routes.how },
         { label: t.nav.roles, href: anchors.roles },
       ],
     },
@@ -82,9 +83,14 @@ export default function Footer() {
               set larger than the links beside it. */}
           <div>
             <h4>{t.footer.sections.contact}</h4>
+            <ul>
+              <li>
+                <A href={routes.contact}>{t.nav.demo}</A>
+              </li>
+            </ul>
             <a
               href={mailto(t.cta.subject)}
-              class="group mt-4 inline-flex items-baseline gap-1 font-medium text-[var(--ink)] hover:text-[var(--brand-ink)]"
+              class="group mt-3 inline-flex items-baseline gap-1 font-medium text-[var(--ink)] hover:text-[var(--brand-ink)]"
             >
               {site.email}
               <FiArrowUpRight class="size-4 shrink-0 self-center transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

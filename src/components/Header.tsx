@@ -1,7 +1,8 @@
+import { A, useLocation } from "@solidjs/router";
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import Logo from "./Logo";
 import { PixelClose, PixelMenu } from "./icons/pixel";
-import { anchors, mailto, site } from "~/config";
+import { anchors, routes, site } from "~/config";
 import { t } from "~/i18n";
 
 /**
@@ -10,13 +11,18 @@ import { t } from "~/i18n";
  * header is the one marked as current.
  */
 export default function Header() {
+  const location = useLocation();
   const [open, setOpen] = createSignal(false);
   const [active, setActive] = createSignal<string | null>(null);
 
-  /** The bar carries four bands; the sheet carries all of them. */
+  /**
+   * The bar carries four stops; the sheet carries every one. "Nasıl çalışır"
+   * is the diagram page rather than the band of the same name — the band is a
+   * summary, and anyone who clicks the label wants the long version.
+   */
   const primary = [
     { href: anchors.products, label: t.nav.products },
-    { href: anchors.theory, label: t.nav.theory },
+    { href: routes.how, label: t.nav.theory },
     { href: anchors.audience, label: t.nav.audience },
     { href: anchors.about, label: t.nav.about },
   ];
@@ -28,9 +34,13 @@ export default function Header() {
     { href: anchors.roles, label: t.nav.roles },
     { href: anchors.trust, label: t.nav.trust },
     { href: anchors.faq, label: t.nav.faq },
+    { href: routes.contact, label: t.nav.contact },
   ];
 
-  const id = (href: string) => href.split("#")[1]!;
+  /** Anchors carry a fragment; the two standing pages do not. */
+  const id = (href: string) => href.split("#")[1] ?? "";
+  const isCurrent = (href: string) =>
+    href.includes("#") ? active() === id(href) : location.pathname === href;
 
   /**
    * Which band is current. The observer's top margin is the header's own
@@ -42,6 +52,7 @@ export default function Header() {
     if (!("IntersectionObserver" in window)) return;
 
     const sections = all
+      .filter(item => item.href.includes("#"))
       .map(item => document.getElementById(id(item.href)))
       .filter((node): node is HTMLElement => node !== null);
 
@@ -69,8 +80,8 @@ export default function Header() {
             {item => (
               <a
                 href={item.href}
-                class={active() === id(item.href) ? "is-current" : undefined}
-                aria-current={active() === id(item.href) ? "true" : undefined}
+                class={isCurrent(item.href) ? "is-current" : undefined}
+                aria-current={isCurrent(item.href) ? "true" : undefined}
               >
                 {item.label}
               </a>
@@ -79,9 +90,9 @@ export default function Header() {
         </nav>
 
         <div class="hz-header-actions">
-          <a href={mailto(t.cta.subject)} class="hz-btn hz-btn-primary">
+          <A href={routes.contact} class="hz-btn hz-btn-primary">
             {t.nav.demo}
-          </a>
+          </A>
           <button
             type="button"
             class="hz-menu-btn"
@@ -106,13 +117,9 @@ export default function Header() {
               </a>
             )}
           </For>
-          <a
-            href={mailto(t.cta.subject)}
-            onClick={() => setOpen(false)}
-            class="hz-btn hz-btn-primary"
-          >
+          <A href={routes.contact} onClick={() => setOpen(false)} class="hz-btn hz-btn-primary">
             {t.nav.demo}
-          </a>
+          </A>
           <p class="hz-small mt-3 px-3">{site.email}</p>
         </div>
       </Show>

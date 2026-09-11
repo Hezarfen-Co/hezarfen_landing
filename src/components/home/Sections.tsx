@@ -28,9 +28,10 @@ import {
   GuidedScreenIllustration,
   StudyPlanIllustration,
 } from "../illustrations/edu";
+import { A } from "@solidjs/router";
 import Reveal from "../Reveal";
 import SectionHeader from "../SectionHeader";
-import { mailto, site } from "~/config";
+import { mailto, routes, site } from "~/config";
 import { t } from "~/i18n";
 
 /** The four things that go wrong today, as four cards. */
@@ -180,7 +181,7 @@ export function Platform() {
 /** The chain from a marked exam to an approved plan, as four steps. */
 export function Theory() {
   return (
-    <section class="hz-band hz-band-alt hz-anchor" id="nasil-calisir">
+    <section class="hz-band hz-band-alt hz-anchor" id="akis">
       <div class="hz-wrap">
         <SectionHeader
           label={t.theory.label}
@@ -201,6 +202,14 @@ export function Theory() {
             )}
           </For>
         </div>
+
+        {/* The band is the summary; the diagram page is the long version. */}
+        <Reveal class="mt-10 flex justify-center">
+          <A href={routes.how} class="hz-btn hz-btn-ghost">
+            {t.theory.more}
+            <PixelArrowRight aria-hidden="true" />
+          </A>
+        </Reveal>
       </div>
     </section>
   );
@@ -448,11 +457,10 @@ export function Contact() {
         <Reveal class="mt-14">
           <div class="hz-cta">
             <h2 class="hz-h2">{t.cta.panelTitle}</h2>
-            <p>{t.cta.panelSubtitle}</p>
             <div class="hz-hero-actions">
-              <a class="hz-btn hz-btn-primary hz-btn-lg" href={mailto(t.cta.subject)}>
+              <A class="hz-btn hz-btn-primary hz-btn-lg" href={routes.contact}>
                 {t.nav.demo}
-              </a>
+              </A>
               <a class="hz-btn hz-btn-ghost hz-btn-lg" href={mailto(t.cta.pilotSubject)}>
                 {t.cta.secondary}
                 <PixelArrowRight aria-hidden="true" />

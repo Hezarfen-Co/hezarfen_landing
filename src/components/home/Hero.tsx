@@ -1,7 +1,8 @@
+import { A } from "@solidjs/router";
 import { For } from "solid-js";
 import { PixelArrowRight } from "../icons/pixel";
 import { AppScreenIllustration } from "../illustrations/edu";
-import { anchors, mailto } from "~/config";
+import { routes } from "~/config";
 import { t } from "~/i18n";
 
 /**
@@ -20,14 +21,16 @@ export default function Hero() {
           {t.hero.line2}
         </h1>
         <p class="hz-lead">{t.hero.lead}</p>
+        {/* The demo goes to the form, and "how does it work" to the diagram:
+            both are pages, because both are longer than a band. */}
         <div class="hz-hero-actions">
-          <a href={mailto(t.cta.subject)} class="hz-btn hz-btn-primary hz-btn-lg">
+          <A href={routes.contact} class="hz-btn hz-btn-primary hz-btn-lg">
             {t.hero.primary}
-          </a>
-          <a href={anchors.products} class="hz-btn hz-btn-ghost hz-btn-lg">
+          </A>
+          <A href={routes.how} class="hz-btn hz-btn-ghost hz-btn-lg">
             {t.hero.secondary}
             <PixelArrowRight aria-hidden="true" />
-          </a>
+          </A>
         </div>
         <p class="hz-hero-note">{t.hero.note}</p>
       </div>

@@ -864,6 +864,481 @@
   color: var(--line-strong);
 }
 
+/* ---- Page head: the two standing pages ------------------------------------- */
+.hz-pagehead {
+  position: relative;
+  padding: clamp(48px, 6vw, 88px) var(--gutter) clamp(32px, 4vw, 56px);
+  overflow: hidden;
+}
+.hz-pagehead::before {
+  content: "";
+  position: absolute;
+  inset: -50% 0 auto;
+  height: 520px;
+  background: radial-gradient(50% 60% at 30% 45%, var(--brand-wash), transparent 72%);
+  z-index: -1;
+}
+.hz-pagehead .hz-wrap {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+}
+.hz-pagehead .hz-display {
+  max-width: 26ch;
+  font-size: clamp(2.25rem, 4.4vw, 3.5rem);
+}
+.hz-pagehead-actions {
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+/* ---- Pipeline: the diagram on /nasil-calisir -------------------------------
+   Four stage cards in a row, each followed by a connector its own records
+   travel along. The connector belongs to the card on its left, so the last
+   stage draws none and the row needs no special case. */
+/* Two wide cards per row rather than four narrow ones: at four columns every
+   stage's copy wrapped every three words, which is what made the diagram
+   look crowded when the content is actually short. */
+.hz-flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 40px;
+  padding-bottom: 72px;
+}
+.hz-flow-item {
+  position: relative;
+}
+.hz-flow-card {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  grid-template-areas:
+    "head art"
+    "body art"
+    "list list";
+  align-content: start;
+  gap: 16px 24px;
+  height: 100%;
+  padding: 28px 30px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+}
+.hz-flow-card header {
+  grid-area: head;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+.hz-flow-card > .hz-small {
+  grid-area: body;
+}
+.hz-flow-card .hz-checks {
+  grid-area: list;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.hz-flow-card .hz-h3 {
+  font-size: 1.25rem;
+}
+.hz-flow-sub {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  color: var(--faint);
+}
+.hz-flow-art {
+  grid-area: art;
+  align-self: start;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--band);
+}
+.hz-flow-art .hz-illustration {
+  color: #b9b7b1;
+}
+
+/* The connector, and the two records crossing it. */
+/* The connector runs in the gap to the card's right, so only the stages in
+   the left column draw one — the numerals carry the order across the row
+   break, and an arrow pointing at a card below it would lie about the flow. */
+.hz-flow-link {
+  position: absolute;
+  top: 74px;
+  right: -40px;
+  width: 40px;
+  height: 2px;
+  background: var(--line-strong);
+}
+.hz-flow-item:nth-child(even) .hz-flow-link,
+.hz-flow-link.is-last {
+  display: none;
+}
+.hz-flow-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  background: var(--line-strong);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.hz-flow-dot {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--brand);
+  animation: hz-travel 2.6s var(--ease) infinite;
+}
+.hz-flow-dot-b {
+  animation-delay: 1.3s;
+  opacity: 0.6;
+}
+
+/* The loop: what usage produces becomes data again. */
+.hz-flow-loop {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+.hz-flow-loop-line {
+  width: 100%;
+  height: 28px;
+  border: 2px dashed var(--line-strong);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+.hz-flow-loop-label {
+  max-width: 72ch;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+@keyframes hz-travel {
+  0% {
+    transform: translateX(-6px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(36px);
+    opacity: 0;
+  }
+}
+
+/* Stage drawings: each animates the thing its stage does. `fill-box` is what
+   makes a bar grow from its own baseline rather than from the viewBox's. */
+.hz-flow-bar,
+.hz-flow-stamp,
+.hz-flow-mark,
+.hz-flow-cell {
+  transform-box: fill-box;
+}
+.hz-flow-bar {
+  transform-origin: bottom;
+  animation: hz-grow 3.4s var(--ease) infinite;
+}
+.hz-flow-mark {
+  transform-origin: center;
+  animation: hz-pop 3.4s var(--ease) infinite;
+}
+.hz-flow-cell {
+  animation: hz-blink 3.4s var(--ease) infinite;
+}
+.hz-flow-stamp {
+  transform-origin: center;
+  animation: hz-stamp 3.4s var(--ease) infinite;
+}
+
+@keyframes hz-grow {
+  0%,
+  12% {
+    transform: scaleY(0.08);
+  }
+  45%,
+  100% {
+    transform: scaleY(1);
+  }
+}
+@keyframes hz-pop {
+  0%,
+  10% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  30%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes hz-blink {
+  0%,
+  12% {
+    opacity: 0.06;
+  }
+  40%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes hz-stamp {
+  0%,
+  40% {
+    transform: scale(0.6) rotate(-8deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.08) rotate(0deg);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---- Numbered rows: where each product sits in the chain ------------------- */
+.hz-rows {
+  margin-top: 40px;
+}
+.hz-row {
+  display: grid;
+  grid-template-columns: 140px 220px 1fr;
+  gap: 12px 32px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+}
+
+/* ---- Two-column ticked list ------------------------------------------------ */
+.hz-checks-2 {
+  margin-top: 36px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 32px;
+}
+
+/* ---- Contact page ---------------------------------------------------------- */
+.hz-contact-split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+.hz-form-card {
+  padding: clamp(22px, 3vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+.hz-form {
+  display: grid;
+  gap: 18px;
+}
+.hz-field-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.hz-field {
+  display: grid;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.hz-field > span,
+.hz-field > legend {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 0;
+}
+.hz-field i {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--faint);
+}
+.hz-field :is(input, select, textarea) {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--paper);
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--body);
+  transition: border-color var(--quick), box-shadow var(--quick);
+}
+.hz-field :is(input, select, textarea):focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-wash);
+}
+.hz-field textarea {
+  resize: vertical;
+}
+.hz-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hz-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color var(--quick), background var(--quick);
+}
+.hz-choice:hover {
+  background: var(--band);
+}
+.hz-choice:has(input:checked) {
+  border-color: var(--brand);
+  background: var(--brand-wash);
+  color: var(--brand-ink);
+}
+.hz-choice input,
+.hz-consent input {
+  accent-color: var(--brand);
+  width: 16px;
+  height: 16px;
+}
+.hz-consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+  color: var(--body);
+  cursor: pointer;
+}
+.hz-consent input {
+  margin-top: 3px;
+  flex: none;
+}
+.hz-form-error {
+  padding: 12px 14px;
+  border: 1px solid #f3c6c6;
+  border-radius: var(--radius);
+  background: #fdf3f3;
+  font-size: 0.9375rem;
+  color: #a32b2b;
+}
+.hz-form button[type="submit"] {
+  justify-self: start;
+}
+.hz-form button[disabled] {
+  opacity: 0.7;
+  cursor: progress;
+}
+.hz-form-note {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--faint);
+}
+.hz-form-done {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  animation: hz-rise 0.5s var(--ease) both;
+}
+.hz-contact-aside {
+  display: grid;
+  gap: 32px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--paper);
+}
+.hz-ministeps {
+  display: grid;
+  gap: 18px;
+  margin-top: 16px;
+}
+.hz-ministeps li {
+  display: grid;
+  gap: 4px;
+  padding-left: 14px;
+  border-left: 2px solid var(--line-strong);
+}
+.hz-ministeps li:first-child {
+  border-left-color: var(--brand);
+}
+.hz-ministeps strong {
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+.hz-contact-direct {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.hz-contact-mail {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--brand-ink);
+}
+.hz-contact-mail:hover {
+  color: var(--brand-hover);
+}
+
+/* ---- Entrance: the first screen assembles ---------------------------------
+   The hero is the one place motion runs on load rather than on scroll, and
+   it is a single short gesture: copy rises line by line, the card follows. */
+.hz-hero-copy > * {
+  animation: hz-rise 0.7s var(--ease) backwards;
+}
+.hz-hero-copy > *:nth-child(2) {
+  animation-delay: 0.07s;
+}
+.hz-hero-copy > *:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.hz-hero-copy > *:nth-child(4) {
+  animation-delay: 0.21s;
+}
+.hz-art-card {
+  animation: hz-rise-card 0.9s var(--ease) 0.22s backwards;
+}
+
+@keyframes hz-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes hz-rise-card {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+}
+
 /* ---- Scroll-triggered entrance --------------------------------------------
    Blocks rise once on entry with a per-card stagger. `is-armed` is only ever
    set on the client, so server markup is never hidden by a script that has
@@ -893,6 +1368,20 @@
   .hz-btn:hover svg {
     transform: none;
   }
+  /* The diagram still reads as a diagram with every stage at rest. */
+  .hz-hero-copy > *,
+  .hz-art-card,
+  .hz-flow-dot,
+  .hz-flow-bar,
+  .hz-flow-mark,
+  .hz-flow-cell,
+  .hz-flow-stamp,
+  .hz-form-done {
+    animation: none !important;
+  }
+  .hz-flow-dot {
+    opacity: 0;
+  }
 }
 
 /* ---- Responsive ------------------------------------------------------------ */
@@ -907,8 +1396,24 @@
   }
   .hz-feature,
   .hz-facts,
-  .hz-footer-cols {
+  .hz-footer-cols,
+  .hz-contact-split {
     grid-template-columns: 1fr;
+  }
+  /* One stage per row: the cards keep their width and the connectors go,
+     since nothing sits to the right of a card any more. */
+  .hz-flow {
+    grid-template-columns: 1fr;
+    padding-bottom: 56px;
+  }
+  .hz-flow-link {
+    display: none;
+  }
+  .hz-row {
+    grid-template-columns: 140px 1fr;
+  }
+  .hz-row p {
+    grid-column: 2;
   }
   /* With one column the drawing follows the copy on every row, flipped or
      not: alternating sides only means something side by side. */
@@ -935,6 +1440,25 @@
   }
   .hz-roles {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .hz-field-row,
+  .hz-checks-2 {
+    grid-template-columns: 1fr;
+  }
+  /* The drawing drops under the copy instead of squeezing beside it. */
+  .hz-flow-card {
+    grid-template-columns: 1fr;
+    grid-template-areas: "head" "art" "body" "list";
+    padding: 22px;
+  }
+  .hz-flow-art {
+    max-width: 260px;
+  }
+  .hz-row {
+    grid-template-columns: 1fr;
+  }
+  .hz-row p {
+    grid-column: 1;
   }
   .hz-roles span:nth-child(n + 3) {
     border-top: 1px solid var(--line);

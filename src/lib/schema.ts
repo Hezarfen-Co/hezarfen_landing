@@ -1,4 +1,4 @@
-import { anchors, site } from "~/config";
+import { anchors, routes, site } from "~/config";
 import type { Dictionary } from "~/i18n";
 
 /**
@@ -27,6 +27,8 @@ type PageInput = {
   title: string;
   description: string;
   t: Dictionary;
+  /** The page's short nav label, for the home → page trail. */
+  breadcrumb?: string;
   /** Nodes describing what the page lists, from the builders below. */
   extra?: object[];
 };
@@ -86,7 +88,57 @@ export function pageGraph(input: PageInput) {
     page,
   ];
 
+  if (input.breadcrumb) {
+    page.breadcrumb = { "@id": `${input.url}#breadcrumb` };
+    nodes.push({
+      "@type": "BreadcrumbList",
+      "@id": `${input.url}#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: input.t.nav.home, item: `${site.url}${routes.home}` },
+        { "@type": "ListItem", position: 2, name: input.breadcrumb, item: input.url },
+      ],
+    });
+  }
+
   return { "@context": "https://schema.org", "@graph": [...nodes, ...(input.extra ?? [])] };
+}
+
+/** `/nasil-calisir`: the chain, as a crawler can read it. */
+export function howToNode(t: Dictionary, url: string) {
+  return {
+    "@type": "HowTo",
+    "@id": `${url}#howto`,
+    name: t.how.title,
+    description: t.how.lead,
+    step: t.how.stages.map((stage, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: stage.title,
+      text: stage.description,
+      url: `${url}#${stage.id}`,
+    })),
+  };
+}
+
+/** `/iletisim`: the page a demo request is made on. */
+export function contactPageNode(t: Dictionary, url: string) {
+  return {
+    "@type": "ContactPage",
+    "@id": `${url}#contact`,
+    name: t.contact.title,
+    description: t.contact.lead,
+    mainEntity: {
+      "@type": "Organization",
+      "@id": ORGANIZATION,
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: site.email,
+        areaServed: "TR",
+        availableLanguage: "Turkish",
+      },
+    },
+  };
 }
 
 /**

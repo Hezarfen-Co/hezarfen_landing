@@ -11,6 +11,8 @@ export default function Seo(props: {
   description: string;
   /** Use the title as given, rather than appending the brand suffix. */
   full?: boolean;
+  /** Short nav label for the home → page trail. Off for the landing page. */
+  breadcrumb?: string;
   /** Extra schema.org nodes describing what the page lists. */
   schema?: object[];
 }) {
@@ -49,6 +51,7 @@ export default function Seo(props: {
           title: title(),
           description: props.description,
           t,
+          breadcrumb: props.breadcrumb,
           extra: props.schema,
         })}
       />

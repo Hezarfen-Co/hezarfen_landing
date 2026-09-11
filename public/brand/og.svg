@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Source for `public/og.png`. Rasterised with:
+         rsvg-convert -w 1200 -h 630 public/brand/og.svg -o public/og.png
+       Kept in the repo so the card can be re-cut when the copy changes. -->
+  <defs>
+    <radialGradient id="wash" cx="50%" cy="12%" r="72%">
+      <stop offset="0%" stop-color="#eaf8fc"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <rect width="1200" height="630" fill="url(#wash)"/>
+
+  <!-- Lockup -->
+  <g transform="translate(80 66) scale(0.17)" shape-rendering="crispEdges">
+    <g fill="#00add8">
+      <rect x="30" y="166" width="44" height="44" rx="6"/>
+      <rect x="86" y="122" width="44" height="44" rx="6"/>
+      <rect x="142" y="78" width="44" height="44" rx="6"/>
+      <rect x="198" y="34" width="44" height="44" rx="6"/>
+    </g>
+    <g fill="#1b1a17" opacity="0.22">
+      <rect x="86" y="178" width="44" height="32" rx="6"/>
+      <rect x="142" y="134" width="44" height="32" rx="6"/>
+      <rect x="142" y="178" width="44" height="32" rx="6"/>
+      <rect x="198" y="90" width="44" height="32" rx="6"/>
+      <rect x="198" y="134" width="44" height="32" rx="6"/>
+    </g>
+  </g>
+  <text x="132" y="100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="32" font-weight="600" fill="#1b1a17" letter-spacing="-0.6">Hezarfen</text>
+
+  <!-- The promise, in the page's own words -->
+  <text x="80" y="286" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="72" font-weight="700" fill="#1b1a17" letter-spacing="-2.6">Okulun verisinden</text>
+  <text x="80" y="368" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="72" font-weight="700" fill="#1b1a17" letter-spacing="-2.6">kişisel çalışma planı</text>
+
+  <text x="80" y="436" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" fill="#787774">Okul, kurs ve etüt merkezleri için eğitim yönetim platformu</text>
+
+  <!-- The four roles, as the page closes its hero -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="22" fill="#37352f">
+    <rect x="80" y="500" width="1040" height="1" fill="#e9e9e7"/>
+    <circle cx="92" cy="546" r="5" fill="#00add8"/>
+    <text x="110" y="554">Yönetici</text>
+    <circle cx="292" cy="546" r="5" fill="#00add8"/>
+    <text x="310" y="554">Öğretmen</text>
+    <circle cx="512" cy="546" r="5" fill="#00add8"/>
+    <text x="530" y="554">Öğrenci</text>
+    <circle cx="712" cy="546" r="5" fill="#00add8"/>
+    <text x="730" y="554">Veli</text>
+  </g>
+
+  <rect x="0" y="624" width="1200" height="6" fill="#00add8"/>
+</svg>

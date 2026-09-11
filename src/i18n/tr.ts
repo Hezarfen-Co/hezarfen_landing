@@ -166,6 +166,7 @@ export const tr = {
     title: "Sınav kâğıdından öğretmen onaylı plana dört adım",
     description:
       "Zincirin hiçbir halkası öğretmeni devre dışı bırakmaz. Her adımın ölçülebilir bir karşılığı var: işlem süresi, program çakışması, önerilerin kabul oranı ve plana uyum.",
+    more: "Ayrıntılı şemayı gör",
     steps: [
       {
         num: "Adım 1",
@@ -326,7 +327,7 @@ export const tr = {
     subtitle:
       "20 dakikalık ihtiyaç görüşmesiyle başlıyoruz; demo kurumunuzun kendi akışına göre kurulur, ardından isterseniz bir dönemlik pilotta sonuçları birlikte ölçüyoruz.",
     panelTitle: "Kurumunuz için 20 dakika ayırın, gerisini birlikte planlayalım",
-    panelSubtitle: "Demo kaydı ya da yüz yüze görüşme; Kayseri ve Niğde'de yerinde destek veriyoruz.",
+
     secondary: "Pilot sürecini sor",
     subject: "Hezarfen demo talebi",
     pilotSubject: "Hezarfen pilot görüşmesi",

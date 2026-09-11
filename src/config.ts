@@ -31,9 +31,15 @@ export const site = {
   },
 } as const;
 
-/** The standing pages. The landing page is the site; the rest are utilities. */
+/**
+ * The standing pages. The landing page carries the argument; the other two
+ * are the places it sends people — the form that starts a demo, and the
+ * diagram that answers "how does this actually work?" in full.
+ */
 export const routes = {
   home: "/",
+  contact: "/iletisim",
+  how: "/nasil-calisir",
 } as const;
 
 /**
@@ -45,7 +51,7 @@ export const anchors = {
   problem: "/#neden",
   products: "/#urunler",
   platform: "/#moduller",
-  theory: "/#nasil-calisir",
+  theory: "/#akis",
   roles: "/#roller",
   trust: "/#guven",
   audience: "/#kimler-icin",
@@ -66,4 +72,6 @@ export const mailto = (subject: string) =>
  */
 export const pageUpdated: Record<keyof typeof routes, string> = {
   home: "2026-09-12",
+  contact: "2026-09-12",
+  how: "2026-09-12",
 };

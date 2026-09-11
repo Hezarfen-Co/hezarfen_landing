@@ -59,9 +59,6 @@ export default function Contact() {
               <a class="hz-contact-mail" href={mailto(t.cta.subject)}>
                 {site.email}
               </a>
-              <p class="hz-small">
-                {t.contact.direct.cityLabel}: {site.city}
-              </p>
             </div>
 
             <A href={routes.how} class="hz-btn hz-btn-quiet">

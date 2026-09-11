@@ -50,7 +50,6 @@ export default function Footer() {
             <Logo />
             <p class="hz-small mt-4 max-w-[36ch]">{t.footer.tagline}</p>
             <p class="hz-small mt-4">
-              {site.city} ·{" "}
               <a
                 href={site.builder.url}
                 rel="noopener noreferrer"

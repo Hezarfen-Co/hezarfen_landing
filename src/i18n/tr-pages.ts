@@ -189,7 +189,6 @@ export const trPages = {
     direct: {
       title: "Doğrudan iletişim",
       description: "Form yerine yazmayı tercih ederseniz aynı yere düşer.",
-      cityLabel: "Merkez",
     },
     kvkk: "Form verileri yalnızca talebin değerlendirilmesi için kullanılır, üçüncü taraflarla paylaşılmaz ve talebiniz kapandıktan sonra saklanmaz.",
   },

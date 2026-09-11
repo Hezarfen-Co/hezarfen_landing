@@ -1136,13 +1136,17 @@
 }
 
 /* ---- Contact page ---------------------------------------------------------- */
+/* The form and the panel beside it are one block: both columns stretch to
+   the taller of the two, so their tops and bottoms line up instead of the
+   short one floating in a column of white. */
 .hz-contact-split {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: clamp(28px, 4vw, 56px);
-  align-items: start;
+  align-items: stretch;
 }
 .hz-form-card {
+  height: 100%;
   padding: clamp(22px, 3vw, 36px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
@@ -1267,11 +1271,19 @@
 }
 .hz-contact-aside {
   display: grid;
-  gap: 32px;
+  /* The steps take the space, the address block sits under them and the
+     diagram link holds the bottom edge — which is what makes the column end
+     level with the form's last field rather than short of it. */
+  grid-template-rows: 1fr auto auto;
+  gap: 28px;
+  height: 100%;
   padding: clamp(20px, 3vw, 28px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
   background: var(--paper);
+}
+.hz-contact-aside > *:first-child {
+  align-self: start;
 }
 .hz-ministeps {
   display: grid;

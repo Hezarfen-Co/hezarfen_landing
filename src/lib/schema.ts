@@ -60,7 +60,6 @@ export function pageGraph(input: PageInput) {
       image: OG_IMAGE,
       address: {
         "@type": "PostalAddress",
-        addressLocality: site.city,
         addressCountry: "TR",
       },
       // Who builds it, so the credit in the about band is part of the entity

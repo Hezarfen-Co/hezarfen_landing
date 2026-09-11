@@ -16,8 +16,6 @@ export const site = {
      and is already answered, and a contact address nobody reads is worse
      than one that does not match the site's domain. */
   email: "merhaba@dizey.sh",
-  phone: "+90 352 000 00 00",
-  city: "Kayseri",
   founded: 2026,
   /** Who builds it. The product speaks for itself; this is the credit line. */
   builder: { name: "Dizey Lab", url: "https://dizey.sh" },

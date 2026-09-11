@@ -274,7 +274,7 @@ export const tr = {
     paragraphs: [
       "Hezarfen; okul, kurs ve etüt merkezlerinin akademik, idari ve finansal süreçlerini tek merkezde birleştiren rol tabanlı bir eğitim yönetim platformudur. Sınav sorusu konu ve kazanım etiketiyle, cevaplar soru soru saklandığı için kurumda biriken veri raporun ötesine geçer: öğrencinin neye, neden ve ne kadar çalışması gerektiğini gösteren bir plana dönüşür.",
       "Analiz ve içerik üretimi kaynağa bağlı çalışır. Kişisel çalışma planı, kaynak özeti, ders çizelgesi taslağı, öğretmen denetimindeki soru üretimi ve sesli ders içeriği; hepsi kurumun kendi verisinden ve kendi yüklediği kaynaklardan üretilir. Öğrenciye gidecek hiçbir çıktı öğretmen onayı olmadan yayımlanmaz.",
-      "Ürün Kayseri'de geliştiriliyor; ilk kurulumlar ve eğitimler yüz yüze destekle yürütülüyor. Türkçe içerik ve MEB süreçlerine uyum sonradan eklenen bir özellik değil, ürünün başlangıç kabulü.",
+      "İlk kurulumlar ve eğitimler yüz yüze destekle yürütülüyor. Türkçe içerik ve MEB süreçlerine uyum sonradan eklenen bir özellik değil, ürünün başlangıç kabulü.",
     ],
     builder: {
       title: "Dizey Lab tarafından geliştiriliyor",

@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import {
   PixelArrowRight,
   PixelBookOpen,
@@ -22,17 +22,14 @@ import {
   PixelUserPlus,
   PixelUsers,
 } from "../icons/pixel";
-import {
-  AnswerSheetIllustration,
-  AudioLessonIllustration,
-  GuidedScreenIllustration,
-  StudyPlanIllustration,
-} from "../illustrations/edu";
+import { AudioLessonIllustration, StudyPlanIllustration } from "../illustrations/edu";
+import ProductShot from "../ProductShot";
 import { A } from "@solidjs/router";
 import Reveal from "../Reveal";
 import SectionHeader from "../SectionHeader";
 import { mailto, routes, site } from "~/config";
 import { t } from "~/i18n";
+import type { ProductShotName } from "~/lib/product-shots";
 
 /** The four things that go wrong today, as four cards. */
 export function Problem() {
@@ -69,14 +66,20 @@ export function Problem() {
   );
 }
 
-/** One feature row per product: copy beside a drawing of what it does. */
+/**
+ * One feature row per product: copy beside the screen that does it. A product
+ * without a screen worth showing yet keeps its drawing rather than borrowing
+ * one that would show something else.
+ */
 export function Products() {
-  const art = [
-    AnswerSheetIllustration,
-    StudyPlanIllustration,
-    GuidedScreenIllustration,
-    AudioLessonIllustration,
-  ];
+  const shots: Partial<Record<string, ProductShotName>> = {
+    "hezarfen-platform": "exam-question",
+    celebi: "celebi",
+  };
+  const drawings: Record<string, typeof StudyPlanIllustration> = {
+    "hezarfen-zeka": StudyPlanIllustration,
+    "ses-atolyesi": AudioLessonIllustration,
+  };
 
   return (
     <section class="hz-band hz-band-alt hz-anchor" id="urunler">
@@ -91,7 +94,7 @@ export function Products() {
         <div class="mt-10">
           <For each={t.products.items}>
             {(item, i) => {
-              const Art = art[i() % art.length]!;
+              const shot = shots[item.id];
               return (
                 <Reveal>
                   <div class="hz-feature" classList={{ "hz-feature-flip": i() % 2 === 1 }}>
@@ -113,9 +116,23 @@ export function Products() {
                         <For each={item.pills}>{pill => <span>{pill}</span>}</For>
                       </div>
                     </div>
-                    <div class="hz-feature-art">
-                      <Art class="hz-illustration" />
-                    </div>
+                    <Show
+                      when={shot}
+                      fallback={
+                        <div class="hz-feature-art">
+                          {(() => {
+                            const Drawing = drawings[item.id] ?? AudioLessonIllustration;
+                            return <Drawing class="hz-illustration" />;
+                          })()}
+                        </div>
+                      }
+                    >
+                      {name => (
+                        <div class="hz-feature-art hz-feature-shot">
+                          <ProductShot name={name()} class={name() === "celebi" ? "hz-shot-tall" : ""} />
+                        </div>
+                      )}
+                    </Show>
                   </div>
                 </Reveal>
               );

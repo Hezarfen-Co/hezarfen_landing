@@ -34,7 +34,10 @@ bun run start      # .output/server/index.mjs
 | `src/components/home/` | `Hero` ve bölümler (`Sections.tsx`). |
 | `src/components/how/Pipeline.tsx` | Dört aşamalı animasyonlu şema. |
 | `src/components/ContactForm.tsx` | Form; sunucu eylemi `src/lib/contact.ts`. |
-| `src/components/illustrations/edu.tsx` | Eğitim temalı pixel illüstrasyonlar. |
+| `src/components/ProductShot.tsx` | Gerçek ürün ekran görüntüsü, ince tarayıcı çerçevesiyle. |
+| `src/lib/product-shots.ts` | Ekran görüntülerinin listesi: dosya, boyut, adres satırı, alt metni. |
+| `public/product/` | Ekran görüntüleri (WebP, 2×). Elle düzenlenmez, script üretir. |
+| `src/components/illustrations/edu.tsx` | Ürünün henüz ekranı olmayan yerler için pixel illüstrasyonlar. |
 | `src/components/icons/pixel.tsx` | Pixelarticons'tan seçilmiş ikonlar (MIT). |
 | `src/app.css` | Tasarım sistemi: tek palet, `hz-` önekli sınıflar. |
 | `src/lib/schema.ts` | schema.org çıktısı (Organization, WebSite, ürün listesi, SSS). |
@@ -81,10 +84,33 @@ rsvg-convert -w 512 -h 512 public/favicon.svg -o public/brand/hezarfen-mark-512.
 rsvg-convert -w 180 -h 180 public/favicon.svg -o public/apple-touch-icon.png
 ```
 
-## Ekran görüntüsü
+## Ekran görüntüleri
 
-`scripts/shoot.mjs` çalışan bir sunucuyu bölüm bölüm fotoğraflar. Playwright
-projenin bağımlılığı değildir; kurulu olduğu yer `PLAYWRIGHT` ile verilir:
+İki ayrı script var.
+
+**Ürün görüntüleri** (`scripts/product-shots/`) — hero'daki pano ve ürün
+satırlarındaki ekranlar, gerçek `hezarfen_frontend` uygulamasından alınır.
+Staging okulu boş olduğu için script frontend'in `/api` isteklerini tarayıcı
+içinde `fixtures.mjs`'teki kurgusal okulun verisiyle yanıtlar; hiçbir backend'e
+yazılmaz ve her çekim aynı sonucu verir. Hangi ekranın, hangi rolle ve hangi
+kadrajla çekileceği `shots.mjs`'tedir. Çıktı WebP'dir (`brew install webp`).
+
+```sh
+# frontend reposunda
+bun run dev -- --host 127.0.0.1 --port 4173
+
+# bu repoda
+PLAYWRIGHT=../hezarfen_frontend/node_modules/playwright/index.mjs \
+  bun scripts/product-shots/shoot.mjs http://127.0.0.1:4173 public/product
+```
+
+Bir görüntünün kadrajı değişirse `src/lib/product-shots.ts` içindeki `width` ve
+`height` değerlerini dosyanın yeni piksel boyutuyla güncelleyin. Ses Atölyesi ve
+Hezarfen Zekâ'nın gösterilecek bir ekranı henüz olmadığı için bu satırlar
+illüstrasyonla kalır.
+
+**Sayfa kontrolü** (`scripts/shoot.mjs`) — landing'in kendisini bölüm bölüm
+fotoğraflar; düzen bozulmalarını gözle yakalamak için:
 
 ```sh
 bun run preview &

@@ -1,13 +1,13 @@
 import { A } from "@solidjs/router";
 import { For } from "solid-js";
 import { PixelArrowRight } from "../icons/pixel";
-import { AppScreenIllustration } from "../illustrations/edu";
+import ProductShot from "../ProductShot";
 import { routes } from "~/config";
 import { t } from "~/i18n";
 
 /**
- * The first screen: a sentence, what it means, two actions, and a drawing of
- * the thing itself on a framed card. The roles the platform serves close the
+ * The first screen: a sentence, what it means, two actions, and the product
+ * itself — the manager's dashboard — on a framed card. The roles the platform serves close the
  * hero on a ruled row, so the page visibly continues below without anything
  * having to move.
  */
@@ -35,10 +35,9 @@ export default function Hero() {
         <p class="hz-hero-note">{t.hero.note}</p>
       </div>
 
-      {/* The product as one screen, on a card that reads as a frame without
-          pretending to be a screenshot. */}
+      {/* The product as one screen: the first thing a müdür opens. */}
       <div class="hz-art-card">
-        <AppScreenIllustration class="hz-illustration" />
+        <ProductShot name="dashboard" priority />
       </div>
 
       <div class="hz-roles">

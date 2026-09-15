@@ -570,6 +570,75 @@
   max-width: 340px;
   color: #c9c7c1;
 }
+/* Feature rows that show a screenshot drop the drawing's padded well: the
+   shot brings its own frame, and a frame inside a frame reads as a mat. */
+.hz-feature-shot {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.hz-feature-shot .hz-shot {
+  box-shadow: var(--shadow);
+}
+
+/* ---- Product screenshot -------------------------------------------------- */
+.hz-shot {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--band);
+}
+/* A portrait shot (a side panel) is capped so its row stays about as tall as
+   its copy. */
+.hz-shot-tall {
+  max-width: 380px;
+}
+.hz-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hz-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 34px;
+  padding-inline: 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.hz-shot-dots {
+  display: flex;
+  gap: 6px;
+}
+.hz-shot-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+.hz-shot-url {
+  min-width: 0;
+  margin-inline: auto;
+  padding: 3px 14px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--sunken);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* The dots are balanced by an empty box of the same width, so the address
+   sits in the true centre of the bar. */
+.hz-shot-bar::after {
+  content: "";
+  width: 39px;
+}
+
 .hz-pills {
   display: flex;
   flex-wrap: wrap;

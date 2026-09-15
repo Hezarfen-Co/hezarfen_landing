@@ -1420,6 +1420,44 @@
   }
 }
 
+/* ---- Page change ------------------------------------------------------------
+   While the next page's code loads, a hairline in brand runs along the top of
+   the viewport; once it lands, the page settles in with a short rise. The bar
+   waits 120ms before showing, so a page that is already cached never flashes
+   it. */
+.hz-route-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 2px;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+}
+.hz-route-progress.is-active {
+  opacity: 1;
+  animation: hz-progress 2.4s cubic-bezier(0.1, 0.7, 0.2, 1) 120ms forwards;
+}
+@keyframes hz-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(0.85);
+  }
+}
+.hz-page-in {
+  animation: hz-page-in 0.42s var(--ease);
+}
+@keyframes hz-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
 /* ---- Scroll-triggered entrance --------------------------------------------
    Blocks rise once on entry with a per-card stagger. `is-armed` is only ever
    set on the client, so server markup is never hidden by a script that has
@@ -1452,6 +1490,8 @@
   /* The diagram still reads as a diagram with every stage at rest. */
   .hz-hero-copy > *,
   .hz-art-card,
+  .hz-page-in,
+  .hz-route-progress,
   .hz-flow-dot,
   .hz-flow-bar,
   .hz-flow-mark,

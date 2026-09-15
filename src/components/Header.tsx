@@ -1,5 +1,5 @@
 import { A, useLocation } from "@solidjs/router";
-import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, on, onCleanup, Show } from "solid-js";
 import Logo from "./Logo";
 import { PixelClose, PixelMenu } from "./icons/pixel";
 import { anchors, routes, site } from "~/config";
@@ -39,8 +39,12 @@ export default function Header() {
 
   /** Anchors carry a fragment; the two standing pages do not. */
   const id = (href: string) => href.split("#")[1] ?? "";
+  /* A band is only current on the page it lives on: on the diagram or the form
+     page, a stale "Ürünler" mark would say the click never left home. */
   const isCurrent = (href: string) =>
-    href.includes("#") ? active() === id(href) : location.pathname === href;
+    href.includes("#")
+      ? location.pathname === routes.home && active() === id(href)
+      : location.pathname === href;
 
   /**
    * Which band is current. The observer's top margin is the header's own
@@ -48,27 +52,36 @@ export default function Header() {
    * screen, and the bottom margin keeps a band that is only just visible from
    * taking the mark from the one filling the viewport.
    */
-  onMount(() => {
-    if (!("IntersectionObserver" in window)) return;
+  createEffect(
+    on(
+      () => location.pathname,
+      pathname => {
+        setActive(null);
+        // The header outlives the page under it, so the bands are looked up
+        // again on every page change: arriving home from the form page has to
+        // find sections that did not exist when the header mounted.
+        if (pathname !== routes.home || !("IntersectionObserver" in window)) return;
 
-    const sections = all
-      .filter(item => item.href.includes("#"))
-      .map(item => document.getElementById(id(item.href)))
-      .filter((node): node is HTMLElement => node !== null);
+        const sections = all
+          .filter(item => item.href.includes("#"))
+          .map(item => document.getElementById(id(item.href)))
+          .filter((node): node is HTMLElement => node !== null);
 
-    const observer = new IntersectionObserver(
-      entries => {
-        const visible = entries
-          .filter(entry => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible.length > 0) setActive(visible[0]!.target.id);
+        const observer = new IntersectionObserver(
+          entries => {
+            const visible = entries
+              .filter(entry => entry.isIntersecting)
+              .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+            if (visible.length > 0) setActive(visible[0]!.target.id);
+          },
+          { rootMargin: "-72px 0px -55% 0px", threshold: 0 },
+        );
+
+        sections.forEach(section => observer.observe(section));
+        onCleanup(() => observer.disconnect());
       },
-      { rootMargin: "-72px 0px -55% 0px", threshold: 0 },
-    );
-
-    sections.forEach(section => observer.observe(section));
-    onCleanup(() => observer.disconnect());
-  });
+    ),
+  );
 
   return (
     <header class="hz-header">

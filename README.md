@@ -130,6 +130,7 @@ Form teslimi için `CONTACT_WEBHOOK_URL` ortam değişkeni gereklidir.
 ## Hareket
 
 Animasyonlar bilgi taşıdığı yerde kullanılır: hero tek kısa jestle açılır,
+sayfa değişirken üstte ince bir yükleme çizgisi akar ve yeni sayfa hafifçe belirir,
 bölümler görüş alanına girdiğinde bir kez yükselir, şemada noktalar bir
 aşamadan diğerine geçer ve her aşamanın çizimi o aşamanın yaptığı işi
 canlandırır. Tümü CSS keyframe'leridir ve `prefers-reduced-motion` tek kuralla
